@@ -2,7 +2,8 @@ import pyautogui
 from time import sleep
 from pyperclip import paste, copy
  
- 
+
+pyautogui.FAILSAFE = True
  
 def encontrar_referencia(imagem):
     cont = 0
@@ -127,4 +128,3 @@ def reabrir_rotina_siga(data_formatada):
         abriu = encontrar_imagem(r'Imagens\abriu.png')
         if type(abriu) == tuple:
             return True
-                 
