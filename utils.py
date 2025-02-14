@@ -1,13 +1,14 @@
 import pyautogui
 from time import sleep
 from pyperclip import paste, copy
-
-
-def encontrarImagem(imagem):
+ 
+ 
+ 
+def encontrar_referencia(imagem):
     cont = 0
     while True:
         try:
-            x, y = pyautogui.locateCenterOnScreen(imagem, grayscale=True, confidence=0.91)     
+            x, y, a, b = pyautogui.locateOnScreen(imagem, grayscale=True, confidence=0.89)    
             return (x, y)
         except:
             sleep(0.8)
@@ -16,24 +17,39 @@ def encontrarImagem(imagem):
                 break
             print("Imagem não encontrada")
             pass
-
-
-def clicarMicrosiga(imagem=r'Imagens\microsiga.png'):
+ 
+ 
+def encontrar_imagem(imagem):
+    cont = 0
+    while True:
+        try:
+            x, y = pyautogui.locateCenterOnScreen(imagem, grayscale=True, confidence=0.91)    
+            return (x, y)
+        except:
+            sleep(0.8)
+            cont += 1
+            if cont == 2:
+                break
+            print("Imagem não encontrada")
+            pass
+ 
+ 
+def clicar_microsiga(imagem=r'Imagens\microsiga.png'):
     try:
-        elemento = encontrarImagem(imagem)
+        elemento = encontrar_imagem(imagem)
         x, y = elemento
         pyautogui.click(x, y)
     except:
         try:
-            elemento = encontrarImagem(r'Imagens\microsiga2.png')
+            elemento = encontrar_imagem(r'Imagens\microsiga2.png')
             x, y = elemento
             pyautogui.click(x, y)
         except:
-            elemento = encontrarImagem(r'Imagens\microsigaWin11.png')
+            elemento = encontrar_imagem(r'Imagens\microsigaWin11.png')
             x, y = elemento
             pyautogui.click(x, y)
-
-
+ 
+ 
 def retornar_objeto_banco(arquivo):
     banco = arquivo.split("_")[1]
     if banco == "396881":
@@ -71,8 +87,8 @@ def retornar_objeto_banco(arquivo):
             },
     }
     return banco, bancos[banco]
-
-
+ 
+ 
 def colar_dado_no_campo(dado):
     copy(dado)
     sleep(0.2)
@@ -81,5 +97,34 @@ def colar_dado_no_campo(dado):
         pass
     else:
         pyautogui.press("tab")
-
-   
+ 
+ 
+def reabrir_rotina_siga(data_formatada):
+    pyautogui.press("esc", interval=1)
+    func_cta_pag = encontrar_imagem(r'Imagens\funcoesCtasPag.png')
+    x,y = func_cta_pag
+    pyautogui.doubleClick(x, y)
+    while True:
+        clicar = encontrar_imagem(r'Imagens\botaoConfirmar.png')
+        if type(clicar) == tuple:
+            pyautogui.write(data_formatada, interval=0.2)
+            pyautogui.press("tab", interval=0.2)
+            x, y = clicar
+            pyautogui.click(x, y)
+            clicar2 = encontrar_imagem(r'Imagens\botaoConfirmar.png')
+            while type(clicar2) == tuple:
+                clicar2 = encontrar_imagem(r'Imagens\botaoConfirmar.png')
+                x, y = clicar2
+                pyautogui.click(x, y)
+            break
+    while True:
+        ignorar4 = encontrar_imagem(r'Imagens\ignorar4.png')
+        if type(ignorar4) == tuple:
+            pyautogui.press(["tab"]*2, interval=0.2)
+            pyautogui.press("enter", interval=0.2)
+            break
+    while True:
+        abriu = encontrar_imagem(r'Imagens\abriu.png')
+        if type(abriu) == tuple:
+            return True
+                 
